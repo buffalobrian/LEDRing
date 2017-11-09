@@ -33,7 +33,13 @@ void circular(uint16_t width, uint32_t color, uint16_t milliseconds) {
   }
 }
 
-void rgbfade(){
+//Blinks r -> g -> b for long exposure shots
+void rgb(){
+
+}
+
+//Blinks c -> y -> m for long exposure shots
+void cym(){
 
 }
 
