@@ -34,8 +34,21 @@ void circular(uint16_t width, uint32_t color, uint16_t milliseconds) {
 }
 
 //Blinks r -> g -> b for long exposure shots
-void rgb(){
-
+void rgb(uint16_t seconds){
+  uint16_t milliseconds = seconds*1000;
+  
+  //wait 4 seconds before looping
+  delay(3000);
+  //show white to signify loop start
+  uniform(white);
+  delay(1000);
+  
+  //loop through rgb
+  uniform(red);
+  delay(milliseconds/3);
+  uniform(green);
+  delay(milliseconds/3);
+  uniform(blue);
 }
 
 //Blinks c -> y -> m for long exposure shots
