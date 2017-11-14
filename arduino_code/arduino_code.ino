@@ -6,6 +6,9 @@
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(50, PIN, NEO_GRB + NEO_KHZ800);
 uint16_t brightness = 255;
+uint16_t last_LED_index = 45;
+uint16_t first_quarter = 11;
+uint16_t third_quarter = 34;
 uint32_t green = strip.Color(255,0,0);
 uint32_t red   = strip.Color(0,255,0);
 uint32_t blue  = strip.Color(0,0,255);
@@ -17,14 +20,22 @@ uint32_t grey  = strip.Color(0, 0, 0);
 // Have to make it circular with drop off on the sides of the brightest LEDs
 // If index is negative, add 45, or greater than 45, subtract 45
 void circular(uint16_t width, uint32_t color, uint16_t milliseconds) {
-  for(uint16_t i = 0; i < strip.numPixels()-5; i++) {
-    strip.setPixelColor(i, color);
-    strip.setPixelColor(i+1, color);
-    strip.setPixelColor(i+2, color);
+  for(uint16_t i = 0; i < last_LED_index + 1; i++) {
+    for(uint16_t j = i; j < i + width; j++) {
+      if(j > last_LED_index){
+        strip.setPixelColor(j - last_LED_index - 1, color);
+      } else {
+        strip.setPixelColor(j, color);
+      }
+    }
     strip.show();
-    strip.setPixelColor(i, 0);
-    strip.setPixelColor(i+1, 0);
-    strip.setPixelColor(i+2, 0);
+    for(uint16_t j = i; j < i + width; j++) {
+      if(j > last_LED_index){
+        strip.setPixelColor(j - last_LED_index - 1, black);
+      } else {
+        strip.setPixelColor(j, black);
+      }
+    }
     delay(milliseconds);
   }
 }
@@ -54,11 +65,11 @@ void cym(){
 
 void halfandhalf(uint32_t left_color, uint32_t right_color) {
   // left
-  for (uint16_t i = 3; i < strip.numPixels() / 2 - 5; i++) {
+  for (uint16_t i = third_quarter - 7; i < third_quarter + 7; i++) {
     strip.setPixelColor(i, left_color);
   }
   // right
-  for (uint16_t i = strip.numPixels() / 2 + 5; i < strip.numPixels() - 5; i++) {
+  for (uint16_t i = first_quarter - 7; i < first_quarter + 7; i++) {
     strip.setPixelColor(i, right_color);
   }
   strip.show();
@@ -76,8 +87,8 @@ void setup() {
 }
 
 void loop() {
-  //circular(3, white, 100);
-  halfandhalf(green,pink);
+  circular(5, white, 50);
+  //halfandhalf(green,pink);
   //uniform(white);
   
   //Code to turn off LED lights
